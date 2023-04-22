@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperatures</title>
+  </head>
+  <body>
+    <p id="result"></p>
+  </body>
+  <script>
+    const resultEl = document.getElementById('result');
+    const fetchTemperatures = async () => {
+      const response = await fetch(`${window.location.origin}/temperatures`);
+      const resData = await response.json();
+      if (resData.success) {
+        const data = resData.data.map(tag => {
+          const localTime = new Date(tag.timestamp).toLocaleString('fi');
+          return `<strong>${tag.tag}</strong> ${tag.temperature} &deg;C (at ${localTime}) <br>`;
+        });
+        resultEl.innerHTML = data.join('');
+      } else {
+        resultEl.textContent = 'Could not get data :('
+      }
+    }
+    fetchTemperatures();
+  </script>
+</html>
